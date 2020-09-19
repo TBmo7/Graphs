@@ -159,9 +159,27 @@ class Graph:
         depth-first order.
 
         This should be done using recursion.
+        TODO MAKE SURE THAT VISITED IS UNIQUE TO EACH NODE!!
         """
-        pass  # TODO
+        visited = set()
+        return self.dfs_recursive_helper([starting_vertex], destination_vertex, visited)
+    def dfs_recursive_helper(self, curr_path,destination_vertex, visited):
 
+        curr_vertex = curr_path[-1]
+        if curr_vertex == destination_vertex:
+            return curr_path
+        visited.add(curr_vertex)
+        for neighbor in self.get_neighbors(curr_vertex):
+            if neighbor not in visited:
+                newPath = list(curr_path)
+                newPath.append(neighbor)
+                res = self.dfs_recursive_helper(newPath, destination_vertex, visited)
+                if len(res) > 0 :
+                    return res
+        return []
+        
+        
+        
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph
     # https://github.com/LambdaSchool/Graphs/blob/master/objectives/breadth-first-search/img/bfs-visit-order.png
