@@ -138,11 +138,10 @@ def earliest_ancestor(ancestors, starting_node):
         """
         need to iterate through the new graph, looking for an element that contains
         the target number, once we find it, we iterate again until we don't return anything
-        Should change this into a function
-        
+
         """
-        for elemento in ancestor_graph.vertices:
-            child = elemento
+        for element in ancestor_graph.vertices:
+            child = element
 
             changed = False
             #child = starting_node
@@ -168,36 +167,12 @@ def earliest_ancestor(ancestors, starting_node):
                         changed = True
                     #adds variables for future checks
             if changed == False:
-                ancestor_graph.top_endpoints.add(parent)
-                ancestor_graph.top_endpoints.add(child)#adds variables for future checks
+                ancestor_graph.top_endpoints.add(parent)#adds variables for future checks
                 #if travel_length == 0:
                     #return -1
                 #return parent        
         finished = True    
-
-    sorted_top_endpoints = sorted(ancestor_graph.top_endpoints, reverse = True)
-    greatest_element = 0
-    greatest_length = 0
-    
-    for element in sorted_top_endpoints:
-        if element in ancestor_graph.top_endpoints:
-            return -1
-        
-        if ancestor_graph.dfs(element,starting_node) != None:
-            #find the greatest length, compare, if current length bigger, update, else leave the same
-            current_length = len(ancestor_graph.dfs(element,starting_node))
-            if current_length > 1:
-                if current_length >= greatest_length:
-                    greatest_length = current_length
-                    greatest_element = element
-                    if greatest_element > element:
-                        greatest_element = element
             
-                
-    if greatest_element != 0:
-        return greatest_element
-    return -1     
-
 
 
 

@@ -121,12 +121,12 @@ def earliest_ancestor(ancestors, starting_node):
         #only_children = {}
         parent = 0
         #endpoint = set()
-        #child = starting_node
+        child = starting_node
         travel_length = 0
         node_length = {}
         possible_parents = set()
-    #if child not in ancestor_graph.vertices:
-        #return -1
+    if child not in ancestor_graph.vertices:
+        return -1
 
     #for element in ancestor_graph.vertices:
         #print(ancestor_graph.dft(element) )
@@ -138,66 +138,38 @@ def earliest_ancestor(ancestors, starting_node):
         """
         need to iterate through the new graph, looking for an element that contains
         the target number, once we find it, we iterate again until we don't return anything
-        Should change this into a function
-        
+
         """
-        for elemento in ancestor_graph.vertices:
-            child = elemento
-
-            changed = False
-            #child = starting_node
-            print(len(ancestor_graph.vertices))
-            print(ancestor_graph.vertices[1])
-            for element in ancestor_graph.vertices:
-                if element in ancestor_graph.bottom_endpoints:
-                    pass
-                else:
-                    print(ancestor_graph.vertices[element])
-                
-                    if len(ancestor_graph.vertices[element]) == 0:
-                        ancestor_graph.bottom_endpoints.add(element)
-                
-                    if child in ancestor_graph.vertices[element]:
-                        #need to get neighbors of this element, and check for possible outcomes,
-                        if len(ancestor_graph.vertices[element]) > 1:
-                            for sub_element in ancestor_graph.vertices[element]:
-                                print(sub_element)
-                        parent = element
-                        child = parent
-                        travel_length += 1
-                        changed = True
-                    #adds variables for future checks
-            if changed == False:
-                ancestor_graph.top_endpoints.add(parent)
-                ancestor_graph.top_endpoints.add(child)#adds variables for future checks
-                #if travel_length == 0:
-                    #return -1
-                #return parent        
-        finished = True    
-
-    sorted_top_endpoints = sorted(ancestor_graph.top_endpoints, reverse = True)
-    greatest_element = 0
-    greatest_length = 0
-    
-    for element in sorted_top_endpoints:
-        if element in ancestor_graph.top_endpoints:
-            return -1
-        
-        if ancestor_graph.dfs(element,starting_node) != None:
-            #find the greatest length, compare, if current length bigger, update, else leave the same
-            current_length = len(ancestor_graph.dfs(element,starting_node))
-            if current_length > 1:
-                if current_length >= greatest_length:
-                    greatest_length = current_length
-                    greatest_element = element
-                    if greatest_element > element:
-                        greatest_element = element
+        changed = False
+        #child = starting_node
+        print(len(ancestor_graph.vertices))
+        print(ancestor_graph.vertices[1])
+        for element in ancestor_graph.vertices:
+            if element in ancestor_graph.bottom_endpoints:
+                pass
+            else:
+                print(ancestor_graph.vertices[element])
             
-                
-    if greatest_element != 0:
-        return greatest_element
-    return -1     
-
+                if len(ancestor_graph.vertices[element]) == 0:
+                    ancestor_graph.bottom_endpoints.add(element)
+            
+                if child in ancestor_graph.vertices[element]:
+                    #need to get neighbors of this element, and check for possible outcomes,
+                    if len(ancestor_graph.vertices[element]) > 1:
+                        for sub_element in ancestor_graph.vertices[element]:
+                            print(sub_element)
+                    parent = element
+                    child = parent
+                    travel_length += 1
+                    changed = True
+                #adds variables for future checks
+        if changed == False:
+            ancestor_graph.top_endpoints.add(parent)#adds variables for future checks
+            if travel_length == 0:
+                return -1
+            return parent        
+            
+            
 
 
 
