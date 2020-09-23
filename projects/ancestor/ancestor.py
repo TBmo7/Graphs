@@ -1,3 +1,14 @@
+"""
+TODO!
+To update this, change the add vertex to add a node class
+build a node class, that has both a parent and a child property
+change the find_end_nodes to include dictionaries instead of nested for loops
+check each node to see if it has a parent property, or a child property
+if it has no parent, it is a top node
+if it has no child, it is a bottom node,
+then continue with the program
+"""
+
 
 from collections import deque
 
@@ -174,7 +185,8 @@ def earliest_ancestor(ancestors, starting_node):
                     #return -1
                 #return parent        
         finished = True    
-
+    #^^^^^^^^^^^Turn the above into a function^^^^^^^^^^^^
+    #vvvvvvvvvvvMay not have to reverse sortvvvvvvvvvvv
     sorted_top_endpoints = sorted(ancestor_graph.top_endpoints, reverse = True)
     greatest_element = 0
     greatest_length = 0

@@ -62,3 +62,20 @@ g.add_vertex(2)
 g.add_vertex(3)
 
 print(g)
+
+
+"""
+
+ISLAND LECTURE PROBLEM
+
+create an island class, with a topedge,botedge, rightedge, left edge
+create a list of island classes
+iterate through the grid, [0][0] if that is a one then all props are that coord
+iterate check the grid up,down,left,right, if any are ones, update
+continue until you have defined the shape of the island,
+
+"""
+
+"""
+Generate Users and Friendships
+"""

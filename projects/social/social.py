@@ -1,3 +1,7 @@
+import random
+import math
+from collections import deque
+
 class User:
     def __init__(self, name):
         self.name = name
@@ -5,8 +9,8 @@ class User:
 class SocialGraph:
     def __init__(self):
         self.last_id = 0
-        self.users = {}
-        self.friendships = {}
+        self.users = {} # creates users {1: User("1"), 2: User("2"),...}
+        self.friendships = {} #{1: {2,3,4}, 2: {1}}
 
     def add_friendship(self, user_id, friend_id):
         """
@@ -27,6 +31,27 @@ class SocialGraph:
         self.last_id += 1  # automatically increment the ID to assign the new user
         self.users[self.last_id] = User(name)
         self.friendships[self.last_id] = set()
+    
+    def get_friends(self, user_id):
+        return self.friendships[user_id] if user_id in self.friendships else set()
+
+
+    def bfs(self, starting_vertex, destination_vertex):
+        visited = set()
+        stack = deque()
+        stack.append([starting_vertex])
+        while len(stack) > 0:
+            currPath = stack.popleft()
+            currNode = currPath[-1]
+            if currNode == destination_vertex:
+                return currPath
+            if currNode not in visited:
+                visited.add(currNode)
+                for neighbor in self.get_friends(currNode):
+                    newPath = list(currPath)
+                    newPath.append(neighbor)
+                    stack.append(newPath)
+        
 
     def populate_graph(self, num_users, avg_friendships):
         """
@@ -43,10 +68,25 @@ class SocialGraph:
         self.users = {}
         self.friendships = {}
         # !!!! IMPLEMENT ME
-
+        for i in range(num_users):
+            self.add_user(f"User {i}")
         # Add users
 
+         
         # Create friendships
+        # Generate all possible friendships and put them into an array
+        # 3 
+        possible_friendships = []
+        for user_id in self.users:
+
+            for friend_id in range(user_id + 1, self.last_id + 1):
+                possible_friendships.append((user_id,friend_id))
+            
+        random.shuffle(possible_friendships)
+
+        for i in range(math.floor(num_users * avg_friendships / 2)):
+            friendship = possible_friendships[i]
+            self.add_friendship(friendship[0], friendship[1])
 
     def get_all_social_paths(self, user_id):
         """
@@ -56,10 +96,66 @@ class SocialGraph:
         extended network with the shortest friendship path between them.
 
         The key is the friend's ID and the value is the path.
+        
+        make a helper method:
+        IN HELPER METHOD ->
+        stack = deque
+        visited = {}
+        output = set()
+        take in the input -> NODE TO FIND FRIENDS
+        find the values associated with that key >
+        if key not in output:
+            add to output 
+        for values associated with key:
+            if those values not in stack > add to stack
+            helpermethod(nextvalue)
+            #use recursion 
+
         """
-        visited = {}  # Note that this is a dictionary, not a set
+        stack = set()
+
+
+        #for element in self.friendships[user_id]:
+            #if element not in stack:
+                #stack.add(element)
+            #self.get_all_social_paths(element)
+        #print(stack)
+        #print(stack)
+
+
+        print(user_id)
+        visited = self.get_all_social_paths_helper(user_id,user_id)
+        #visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
         return visited
+    #def get_all_social_paths_helper(self, user_id, stack = set()): ALT1
+    def get_all_social_paths_helper(self, prim_id, user_id, stack = dict()):    
+        #head_len = len(self.friendships[user_id])
+        #visited = len(self.friendships[user_id])
+        #while visited < len(self.users):
+        for element in self.friendships[user_id]:
+                    
+            #if element in stack:
+                #return stack
+                    
+                    
+            if element not in stack:
+                    #might be able to add BFS here?
+                    #stack.add(element) ALT1
+                distance = self.bfs(prim_id, element)
+                stack[element] = distance
+                    
+                self.get_all_social_paths_helper(prim_id,element,stack)
+        #visited += 1
+            #return
+        if len(stack) ==0:
+            return {}
+        
+        sorted_stack = dict(sorted(stack.items()))
+        return sorted_stack
+        
+
+
 
 
 if __name__ == '__main__':
