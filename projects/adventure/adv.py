@@ -7,7 +7,16 @@ from ast import literal_eval
 
 # Load world
 world = World()
+"""
+First thing we need to do is get the exits of the room that we're currently in
+if there are unexplored exits in the room . add room to unexplored options
+if we explore all locations, there are no ? in the room, we remove from unexplored rooms
+when we first explore a room > we log the room ID and the exits. 
+when we move, we add out direction to the traversal path
 
+We keep moving through rooms so long as we don't find ourselves in a room with 
+all exits mapped, at that point look for a room that has "?" for an exit
+"""
 
 # You may uncomment the smaller graphs for development and testing purposes.
 # map_file = "maps/test_line.txt"
