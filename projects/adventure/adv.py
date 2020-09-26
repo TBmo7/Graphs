@@ -99,6 +99,7 @@ class Traversal_graph():
             currNode = currPath[-1]
             print(currNode)
             if currNode == '?':
+                print('triggered')
                 #This is to bypass the '?' key error
                 currPath = stack.popleft()
                 currNode = currPath[-1]
