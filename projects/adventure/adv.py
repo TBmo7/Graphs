@@ -91,19 +91,25 @@ class Traversal_graph():
         #going to change this to a BFS for the closest room with an unvisited exit
         visited = set()
         stack = deque()
-        stack.append(starting_vertex)
+        stack.append([starting_vertex])
         #need to look through nodes for the closest one with an unvisited exit
+        #for some reason this function sometimes receives a '?' as a key, can't explain it, adding workaround
         while len(stack) > 0:
             currPath = stack.popleft()
             currNode = currPath[-1]
-            
+            print(currNode)
+            if currNode == '?':
+                #This is to bypass the '?' key error
+                currPath = stack.popleft()
+                currNode = currPath[-1]
             if currNode == destination_vertex:
                 return currPath
             if currNode not in visited:
                 visited.add(currNode)
-                for neighbor in self.get_neighbors(currNode):
+                for neighbor in self.vertices[currNode]:
+                    room_number = self.vertices[currNode][neighbor]
                     newPath = list(currPath)
-                    newPath.append(neighbor)
+                    newPath.append(room_number)
                     stack.append(newPath)
     #BFS is good for finding A way to a room, but it is not working the way it needs to
     #SO this is wrong, because it's a BFT, and not a BFS, but it does give us what we need to know for  
@@ -148,11 +154,7 @@ class Traversal_graph():
                 
         return out_list
     
-    def back_track(self, path):
-        # this should go back down the path that we traversed, and check for the
-        #closest room that has an exit that we haven't visited
-        for element in path:
-            pass
+    
             
 
 # Load world
@@ -172,8 +174,8 @@ all exits mapped, at that point look for a room that has "?" for an exit
 #map_file = "projects/adventure/maps/test_line.txt"
 #map_file = "projects/adventure/maps/test_cross.txt"
 #map_file = "projects/adventure/maps/test_loop.txt"
-map_file = "projects/adventure/maps/test_loop_fork.txt"
-#map_file = "projects/adventure/maps/main_maze.txt" #>MAIN FOR A REASON
+#map_file = "projects/adventure/maps/test_loop_fork.txt"
+map_file = "projects/adventure/maps/main_maze.txt" #>MAIN FOR A REASON
 
 # Loads the map into a dictionary
 room_graph=literal_eval(open(map_file, "r").read())
@@ -216,7 +218,14 @@ while len(visited_rooms) < len(room_graph): #3 is for line
         else:
             #Here we have to find the closest room with an exit that we haven't used
             known_paths = tgraph.bft(current_room)
-            back_map = tgraph.backtrack( known_paths)
+            #the BFT for the back_map is not always the shortest path
+            #adding a function to get the shortest path
+            target_room = known_paths[-1]
+            streamlined_paths = tgraph.bfs(current_room, target_room)
+            #streamlined_map = tgraph.backtrack(streamlined_paths)
+
+            back_map = tgraph.backtrack( streamlined_paths)
+            #print(target_room)
             #we have a path to the nearest room with an unvisited exit
             #now we head back on that path, and record our journey
             for element in back_map:
