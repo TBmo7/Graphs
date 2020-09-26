@@ -79,3 +79,16 @@ continue until you have defined the shape of the island,
 """
 Generate Users and Friendships
 """
+
+visited = {}
+queue = deque()
+queue.append([user_id])
+while len(queue) >0 :
+    currPath = queue.popleft()
+    currNode = currPath[-1]
+    visited[currNode] = currPath
+    for friend in self.Friendships[currNode]:
+        if friend not in visited:
+            newPath = currPath.copy()
+            newPath.append(friend)
+            
